@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"/>
+ <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+ <title>Hệ Thống Ngân Hàng Nhà Trọ</title>
+ <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet"/>
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+ <style>
+  body {
+   font-family: Arial, sans-serif;
+  }
+  .navbar {
+   background-color: #f8f9fa;
+  }
+  .navbar-brand {
+   font-weight: bold;
+  }
+  .content {
+   padding: 20px;
+  }
+  .content .form-section {
+   background-color: #e9ecef;
+   padding: 20px;
+   border-radius: 5px;
+  }
+  .content .form-section h5 {
+   background-color: #007bff;
+   color: white;
+   padding: 10px;
+   border-radius: 5px;
+  }
+  .navbar1 {
+   background-color: #007bff;
+   padding: 10px;
+   text-align: center;
+  }
+  .navbar1 a {
+   color: white;
+   text-decoration: none;
+   margin: 0 15px;
+   font-weight: bold;
+  }
+  .navbar1 a:hover {
+   text-decoration: underline;
+  }
+  .footer {
+   background-color: #007bff;
+   color: white;
+   text-align: center;
+   padding: 10px 0;
+   margin-top: 20px;
+  }
+ </style>
+ <script>
+  function onLoginSuccess(username) {
+   localStorage.setItem("username", username);
+   document.getElementById("usernameDisplay").innerText = username;
+  }
+
+  window.onload = function () {
+   const username = localStorage.getItem("username");
+   if (username) {
+    document.getElementById("usernameDisplay").innerText = username;
+   }
+   loadRoomData(); // Load room data on page load
+  }
+
+  function logout() {
+   localStorage.removeItem("username");
+   window.location.href = "trangchu-logout.html";
+  }
+
+  function addRoom() {
+   const roomData = {
+    tenPhongTro: document.getElementById("tenPhongTro").value,
+    loaiNhaTro: document.getElementById("loaiNhaTro").value,
+    quanHuyen: document.getElementById("quanHuyen").value,
+    phuongXa: document.getElementById("phuongXa").value,
+    giaPhong: document.getElementById("giaPhong").value,
+    dienTich: document.getElementById("dienTich").value,
+    diaChi: document.getElementById("diaChi").value,
+    sdt: document.getElementById("sdt").value,
+    tieuNghi: [
+     document.getElementById("camera").checked ? "Camera" : null,
+     document.getElementById("wifi").checked ? "Wifi" : null,
+     document.getElementById("gacLung").checked ? "Gác lửng" : null,
+     document.getElementById("tuBep").checked ? "Tủ bếp" : null,
+     document.getElementById("remCua").checked ? "Rèm cửa" : null,
+     document.getElementById("tivi").checked ? "Tivi" : null,
+     document.getElementById("giuong").checked ? "Giường" : null,
+     document.getElementById("tuLanh").checked ? "Tủ lạnh" : null,
+    ].filter(Boolean),
+    moTa: document.getElementById("moTa").value,
+    imageUrl: document.getElementById("roomImage").src,
+    ngayDang: new Date().toLocaleString(), // Set current date and time as posting date
+    trangThaiDuyet: "Chưa duyệt", // Default approval status
+    trangThaiPhong: "Trống" // Default room status
+   };
+
+   let rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+   rooms.push(roomData);
+   localStorage.setItem("rooms", JSON.stringify(rooms));
+   alert("Thêm phòng trọ thành công!");
+   loadRoomData();
+  }
+
+  function loadRoomData() {
+   const rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+   const roomList = document.getElementById("roomList");
+   roomList.innerHTML = "";
+
+   rooms.forEach((room, index) => {
+    const roomRow = document.createElement('tr');
+    roomRow.innerHTML = `
+         <td>${index + 1}</td>
+         <td><img src="${room.imageUrl || ''}" class="room-image" alt="${room.tenPhongTro || 'Room Image'}" style="width: 100px; height: auto;"/></td>
+         <td>${room.tenPhongTro || ''}</td>
+         <td>${room.loaiNhaTro || ''}</td>
+         <td>${room.diaChi || ''}</td>
+         <td>${room.ngayDang || ''}</td>
+         <td>${room.trangThaiDuyet || ''}</td>
+         <td>${room.trangThaiPhong || ''}</td>
+         <td>
+            <button class="btn btn-primary" onclick="editRoom(${index})">Sửa </button>
+            <button class="btn btn-danger" onclick="removeRoom(${index})">Xóa</button>
+         </td>
+      `;
+    roomList.appendChild(roomRow);
+   });
+  }
+
+  function editRoom(index) {
+   const rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+   const room = rooms[index];
+
+   const newStatus = prompt("Cập nhật trạng thái phòng (ví dụ: Trống, Đã cho thuê):", room.trangThaiPhong);
+
+   if (newStatus) {
+    room.trangThaiPhong = newStatus;
+    rooms[index] = room;
+    localStorage.setItem("rooms", JSON.stringify(rooms));
+    alert("Cập nhật trạng thái phòng thành công!");
+    loadRoomData();
+   }
+  }
+
+  function removeRoom(index) {
+   let rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+   rooms.splice(index, 1);
+   localStorage.setItem("rooms", JSON.stringify(rooms));
+   loadRoomData();
+  }
+
+  function previewImage() {
+   const file = document.getElementById('roomImageInput').files[0];
+   const reader = new FileReader();
+
+   reader.onload = function (e) {
+    const img = document.getElementById('roomImage');
+    img.src = e.target.result;
+    img.style.display = 'block';
+   }
+
+   if (file) {
+    reader.readAsDataURL(file);
+   }
+  }
+
+
+ </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light">
+ <div class="container">
+  <a class="navbar-brand" href="#">Hệ Thống Ngân Hàng Nhà Trọ Hỗ Trợ Sinh Viên - Trường Đại Học Mở Hà Nội</a>
+  <div class="ml-auto">
+   <span id="usernameDisplay">Tên tài khoản</span>
+   <button class="btn btn-success" onclick="logout()">Đăng xuất</button>
+  </div>
+ </div>
+</nav>
+
+<div class="navbar1">
+ <a href="#">TRANG CHỦ</a>
+ <a href="#">HƯỚNG DẪN HỆ THỐNG</a>
+ <a href="#">THÔNG TIN CÁ NHÂN</a>
+ <a href="#">QUẢN LÝ TIN NHÀ TRỌ</a>
+ <a href="#">CÁC LOẠI NHÀ TRỌ</a>
+</div>
+
+<div class="content container">
+ <div class="form-section">
+  <h5>Bạn hãy nhập đầy đủ thông tin phòng bạn muốn cho thuê</h5>
+  <form onsubmit="event.preventDefault(); addRoom();">
+   <div class="row mb-3">
+    <div class="col-md-6">
+     <label class="form-label" for="tenPhongTro">Tên phòng trọ</label>
+     <input class="form-control" id="tenPhongTro" type="text" required/>
+    </div>
+    <div class="col-md-6">
+     <label class="form-label" for="loaiNhaTro">Loại nhà trọ</label>
+     <select class="form-select" id="loaiNhaTro" required>
+      <option selected="">Chọn loại nhà trọ</option>
+      <option value="Ký túc xá">Ký túc xá</option>
+      <option value="Phòng riêng">Phòng riêng</option>
+     </select>
+    </div>
+   </div>
+   <div class="row mb-3">
+    <div class="col-md-3">
+     <label class="form-label" for="quanHuyen">Quận/Huyện</label>
+     <select class="form-select" id="quanHuyen" required>
+      <option selected="">Chọn quận/huyện</option>
+     </select>
+    </div>
+    <div class="col-md-3">
+     <label class="form-label" for="phuongXa">Phường/Xã</label>
+     <select class="form-select" id="phuongXa" required>
+      <option selected="">Chọn phường/xã</option>
+     </select>
+    </div>
+    <div class="col-md-3">
+     <label class="form-label" for="giaPhong">Giá Phòng (VND)</label>
+     <input class="form-control" id="giaPhong" type="number" required/>
+    </div>
+    <div class="col-md-3">
+     <label class="form-label" for="dienTich">Diện Tích (m²)</label>
+     <input class="form-control" id="dienTich" type="number" required/>
+    </div>
+   </div>
+   <div class="row mb-3">
+    <div class="col-md-6">
+     <label class="form-label" for="diaChi">Địa chỉ</label>
+     <input class="form-control" id="diaChi" type="text" required/>
+    </div>
+    <div class="col-md-6">
+     <label class="form-label" for="sdt">Số điện thoại</label>
+     <input class="form-control" id="sdt" type="text" required/>
+    </div>
+   </div>
+   <div class="mb-3">
+    <h6>Các tiện nghi</h6>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="camera"/>
+     <label class="form-check-label" for="camera">Camera</label>
+    </div>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="wifi"/>
+     <label class="form-check-label" for="wifi">Wifi</label>
+    </div>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="gacLung"/>
+     <label class="form-check-label" for="gacLung">Gác lửng</label>
+    </div>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="tuBep"/>
+     <label class="form-check-label" for="tuBep">Tủ bếp</label>
+    </div>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="remCua"/>
+     <label class="form-check-label" for="remCua">Rèm cửa</label>
+    </div>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="tivi"/>
+     <label class="form-check-label" for="tivi">Tivi</label>
+    </div>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="giuong"/>
+     <label class="form-check-label" for="giuong">Giường</label>
+    </div>
+    <div class="form-check">
+     <input class="form-check-input" type="checkbox" id="tuLanh"/>
+     <label class="form-check-label" for="tuLanh">Tủ lạnh</label>
+    </div>
+   </div>
+   <div class="mb-3">
+    <label class="form-label" for="moTa">Mô tả</label>
+    <textarea class="form-control" id="moTa" rows="3"></textarea>
+   </div>
+   <div class="mb-3">
+    <label class="form-label" for="roomImageInput">Hình ảnh phòng</label>
+    <input class="form-control" id="roomImageInput" type="file" accept="image/*" onchange="previewImage()"/>
+    <img id="roomImage" src="" alt="Hình ảnh phòng" style="display: none; margin-top: 10px;"/>
+   </div>
+   <button class="btn btn-primary" type="submit">Thêm phòng</button>
+  </form>
+ </div>
+
+ <div class="mt-5">
+  <h5>Danh sách phòng trọ đã thêm:</h5>
+  <table class="table table-bordered" id="roomTable">
+   <thead>
+   <tr>
+    <th>STT</th>
+    <th>Hình ảnh</th>
+    <th>Tên phòng trọ</th>
+    <th>Loại nhà trọ</th>
+    <th>Địa chỉ</th>
+    <th>Ngày đăng</th>
+    <th>Trạng thái duyệt</th>
+    <th>Trạng thái phòng</th>
+    <th>Tác vụ</th>
+   </tr>
+   </thead>
+   <tbody id="roomList">
+   <!-- Room entries will be dynamically added here -->
+   </tbody>
+  </table>
+ </div>
+</div>
+
+<footer class="footer">
+ <p>TRƯỜNG ĐẠI HỌC MỞ HÀ NỘI</p>
+ <p>© B101 Nguyễn Hiền, Bách Khoa, Hai Bà Trưng, Hà Nội</p>
+ <p>Hệ thống ngân hàng nhà trọ của Trường Đại Mở Hà Nội (HOU)</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

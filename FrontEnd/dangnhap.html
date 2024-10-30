@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Đăng Nhập</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://example.com/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .form-container h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 85%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            width: 85%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .divider hr {
+            flex: 1;
+            border: 0;
+            height: 1px;
+            background: #ccc;
+        }
+
+        .divider span {
+            padding: 0 10px;
+            color: #666;
+        }
+
+        a {
+            display: block;
+            margin: 10px 0;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<form id="form1" method="post">
+    <div class="form-container">
+        <h1>Đăng nhập</h1>
+        <input type="text" name="username" placeholder="Tài khoản" required />
+        <input type="password" name="password" placeholder="Mật khẩu" required />
+        <input type="submit" id="btnSubmit" value="Đăng nhập" />
+        <a href="dangnhap.html">Quên mật khẩu</a>
+        <div class="divider">
+            <hr>
+            <span>Bạn là thành viên mới?</span>
+            <hr>
+        </div>
+        <a href="dangky.html" class="register-btn">Tạo tài khoản</a>
+    </div>
+</form>
+
+<script>
+    if (!localStorage.getItem("userData")) {
+        const sampleUserData = {
+            username: "user",
+            password: "password"
+        };
+        localStorage.setItem("userData", JSON.stringify(sampleUserData));
+    }
+
+    document.getElementById("form1").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const username = document.getElementsByName("username")[0].value;
+        const password = document.getElementsByName("password")[0].value;
+
+        const userData = JSON.parse(localStorage.getItem("userData"));
+
+        const adminUserData = {
+            username: "admin",
+            password: "admin"
+        };
+
+        if (
+            (userData && userData.username === username && userData.password === password) ||
+            (username === adminUserData.username && password === adminUserData.password)
+        ) {
+            alert("Đăng nhập thành công!");
+            localStorage.setItem("username", username);
+            window.location.href = "trangchu-login.html";
+        } else {
+            alert("Tên tài khoản hoặc mật khẩu không đúng.");
+        }
+    });
+</script>
+
+</body>
+</html>

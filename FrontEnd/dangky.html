@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Đăng Ký</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://example.com/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .form-container h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-container p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            width: 90%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+
+        a {
+            display: block;
+            margin: 10px 0;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        #error-message {
+            color: red;
+            display: none;
+        }
+    </style>
+    <script>
+        function check() {
+            var password = document.getElementById("password").value;
+            var repassword = document.getElementById("repassword").value;
+            var cccd = document.getElementsByName("cccd")[0].value;
+            var email = document.getElementsByName("email")[0].value;
+            var sdt = document.getElementsByName("sdt")[0].value;
+            var errorMessage = document.getElementById("error-message");
+
+            errorMessage.style.display = "none";
+            errorMessage.innerText = "";
+
+            var cccdCheck = /^0\d{11}$/;
+            if (!cccdCheck.test(cccd)) {
+                errorMessage.style.display = "block";
+                errorMessage.innerText = "CCCD phải là số bắt đầu bằng 0 và có 12 ký tự.";
+                return false;
+            }
+            var sdtCheck = /^0\d{9}$/;
+            if (!sdtCheck.test(sdt)) {
+                errorMessage.style.display = "block";
+                errorMessage.innerText = "Số điện thoại bắt đầu từ 0 và có 10 kí tự.";
+                return false;
+            }
+
+            var emailCheck = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            if (!emailCheck.test(email)) {
+                errorMessage.style.display = "block";
+                errorMessage.innerText = "Email phải có định dạng @gmail.com.";
+                return false;
+            }
+
+            if (password.length < 8) {
+                errorMessage.style.display = "block";
+                errorMessage.innerText = "Mật khẩu phải có ít nhất 8 ký tự.";
+                return false;
+            }
+
+            if (password !== repassword) {
+                errorMessage.style.display = "block";
+                errorMessage.innerText = "Mật khẩu không khớp.";
+                return false;
+            }
+
+            errorMessage.style.display = "none";
+            const userData = {
+                username: document.getElementsByName("username")[0].value,
+                password: document.getElementById("password").value,
+                cccd: document.getElementsByName("cccd")[0].value,
+                sdt: document.getElementsByName("sdt")[0].value,
+                email: document.getElementsByName("email")[0].value,
+                name: document.getElementsByName("name")[0].value
+            };
+
+            localStorage.setItem("userData", JSON.stringify(userData));
+
+            alert("Đăng ký thành công!");
+            return true;
+        }
+
+    </script>
+</head>
+<body>
+    <form id="form1" method="post" onsubmit="return check()">
+        <div class="form-container">
+            <h1>Trang Đăng Ký</h1>
+            <p>Nhập thông tin để tạo tài khoản</p>
+            <input type="text" name="name" placeholder="Họ và tên" required />
+            <br />
+            <input type="text" name="cccd" placeholder="Số căn cước công dân" required />
+            <br />
+            <input type="text" name="sdt" placeholder="Số điện thoại" required />
+            <br />
+            <input type="text" name="email" placeholder="Email" required />
+            <br />
+            <input type="text" name="username" placeholder="Tài khoản" required />
+            <br />
+            <input type="password" name="password" id="password" placeholder="Mật khẩu" required />
+            <br />
+            <input type="password" name="repassword" id="repassword" placeholder="Nhập lại mật khẩu" required />
+            <br />
+            <div id="error-message">Mật khẩu không khớp.</div>
+            <input type="submit" id="btnSubmit" value="Đăng ký" />
+            <br />
+            <a href="dangnhap.html">Đã có tài khoản? Đăng nhập ngay</a>
+        </div>
+    </form>
+</body>
+</html>

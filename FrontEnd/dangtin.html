@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Hệ thống ngân hàng nhà trọ hỗ trợ sinh viên - Trường Đại học Mở Hà Nội</title>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+	.header {
+            background-color: #f8f9fa;
+}
+    .header {
+      padding: 10px 0;
+      text-align: center;
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 50px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin: 0;
+      color: #007bff;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .header .contact-info {
+      font-size: 14px;
+      text-align: right;
+	margin-right: 20px
+    }
+
+    .header .btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+    }
+
+    .navbar {
+      background-color: #007bff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      margin-top: 20px;
+    }
+
+    .form-container {
+      border: 1px solid #dee2e6;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #f8f9fa;
+    }
+
+    .form-container h5 {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+    }
+
+    .form-check {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .image-upload {
+      border: 1px dashed #ced4da;
+      padding: 20px;
+      text-align: center;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .image-upload img {
+      width: 100px;
+      height: 100px;
+      opacity: 0.5;
+    }
+
+    .image-upload input {
+      display: none;
+    }
+    .btn{
+      align-content: center;
+    }
+    .btn-submit {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      width: fit-content;
+      align-content: center;
+    }
+
+    .btn-submit:hover {
+      background-color: #0056b3;
+    }
+    .custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    }
+
+.custom-checkbox .form-check-input {
+  width: 12px;
+  height: 12px;
+}
+  </style>
+  <script>
+    function onLoginSuccess(username) {
+      localStorage.setItem("username", username);
+      document.getElementById("usernameDisplay").innerText = username;
+    }
+
+    window.onload = function() {
+      const username = localStorage.getItem("username");
+      if (username) {
+        document.getElementById("usernameDisplay").innerText = username;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("username");
+      window.location.href = "trangchu-logout.html";
+    }
+  </script>
+</head>
+<body>
+  <div class="header">
+    <h1>Hệ thống ngân hàng nhà trọ hỗ trợ sinh viên - Trường Đại học Mở Hà Nội</h1>
+    <div class="contact-info">
+      <p>Lê Việt Thành<br/>sdt user</p>
+    </div>
+    <button class="btn">Đăng Xuất</button>
+  </div>
+  <div class="navbar">
+    <a href="#">TRANG CHỦ</a>
+    <a href="#">HƯỚNG DẪN HỆ THỐNG</a>
+    <a href="#">THÔNG TIN CÁ NHÂN</a>
+    <a href="#">QUẢN LÝ TIN NHÀ TRỌ</a>
+    <a href="#">CÁC LOẠI NHÀ TRỌ</a>
+  </div>
+
+  <div class="container">
+    <div class="form-container">
+      <h5>Bạn hãy nhập đầy đủ thông tin phòng bạn muốn cho thuê</h5>
+      <form>
+        <div class="form-group">
+          <label for="tenPhongTro">Tên phòng trọ</label>
+          <input class="form-control" id="tenPhongTro" type="text"/>
+        </div>
+        <div class="form-group">
+          <label for="loaiPhong">Loại nhà trọ</label>
+          <select class="form-control" id="loaiPhong">
+            <option>Chọn loại phòng</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="quanHuyen">Quận/Huyện</label>
+          <select class="form-control" id="quanHuyen">
+            <option>Chọn quận huyện</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="phuongXa">Phường/Xã</label>
+          <select class="form-control" id="phuongXa">
+            <option>Chọn phường xã</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="diaChi">Địa chỉ</label>
+          <input class="form-control" id="diaChi" type="text"/>
+        </div>
+        <div class="form-group">
+          <label for="giaPhong">Giá Phòng (VND)</label>
+          <input class="form-control" id="giaPhong" type="text"/>
+        </div>
+        <div class="form-group">
+          <label for="giaDienNuoc">Giá Điện-Nước</label>
+          <input class="form-control" id="giaDienNuoc" type="text"/>
+        </div>
+        <div class="form-group">
+          <label for="dienTich">Diện tích (m²)</label>
+          <input class="form-control" id="dienTich" type="text"/>
+        </div>
+        <div class="form-group">
+          <label for="sdtNhaTro">SDT chủ nhà trọ</label>
+          <input class="form-control" id="sdtNhaTro" type="text"/>
+        </div>
+        
+        <div class="form-group">
+  <label>Tiện ích</label>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="allAmenities" type="checkbox"/>
+        <label class="form-check-label" for="allAmenities">Chọn tất cả</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="giuongNgu" type="checkbox"/>
+        <label class="form-check-label" for="giuongNgu">Giường ngủ</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="remCua" type="checkbox"/>
+        <label class="form-check-label" for="remCua">Rèm cửa</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="binhNongLanh" type="checkbox"/>
+        <label class="form-check-label" for="binhNongLanh">Bình nóng lạnh</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="mayGiat" type="checkbox"/>
+        <label class="form-check-label" for="mayGiat">Máy giặt</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="gioGiacTuDo" type="checkbox"/>
+        <label class="form-check-label" for="gioGiacTuDo">Giờ giấc tự do</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="tivi" type="checkbox"/>
+        <label class="form-check-label" for="tivi">Ti vi</label>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="khoaVanTay" type="checkbox"/>
+        <label class="form-check-label" for="khoaVanTay">Khóa vân tay</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="khongChungChu" type="checkbox"/>
+        <label class="form-check-label" for="khongChungChu">Không chung chủ</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="camera" type="checkbox"/>
+        <label class="form-check-label" for="camera">Camera</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="demGiuong" type="checkbox"/>
+        <label class="form-check-label" for="demGiuong">Đệm giường</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="khuDeXe" type="checkbox"/>
+        <label class="form-check-label" for="khuDeXe">Khu để xe</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="tuDo" type="checkbox"/>
+        <label class="form-check-label" for="tuDo">Tủ đồ</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="thangMay" type="checkbox"/>
+        <label class="form-check-label" for="thangMay">Thang máy</label>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="wifi" type="checkbox"/>
+        <label class="form-check-label" for="wifi">Wifi</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="dieuHoa" type="checkbox"/>
+        <label class="form-check-label" for="dieuHoa">Điều hòa</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="banGhe" type="checkbox"/>
+        <label class="form-check-label" for="banGhe">Bàn ghế</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="banCong" type="checkbox"/>
+        <label class="form-check-label" for="banCong">Ban công</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="thietBiVeSinh" type="checkbox"/>
+        <label class="form-check-label" for="thietBiVeSinh">Thiết bị vệ sinh</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="banBep" type="checkbox"/>
+        <label class="form-check-label" for="banBep">Bàn bếp</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="quatDien" type="checkbox"/>
+        <label class="form-check-label" for="quatDien">Quạt điện</label>
+      </div>
+      <div class="form-check custom-checkbox">
+        <input class="form-check-input" id="tuBep" type="checkbox"/>
+        <label class="form-check-label" for="tuBep">Tủ bếp</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        
+        <div class="form-group">
+          <label for="chonAnh">Chọn ảnh đại diện cho phòng trọ</label>
+          <div class="image-upload">
+            <label for="chonAnh">
+              <img alt="Upload Image" src="https://storage.googleapis.com/a1aa/image/x9uSdjcumprDIZFoQYBOpHVEE7cxY3N1jftabLSmyge0cCrTA.jpg"/>
+            </label>
+            <input id="chonAnh" type="file"/>
+            <p>Không có tệp nào được chọn</p>
+          </div>
+        </div>
+        <div class="button">
+          <button class="btn-submit " type="submit">Đăng tin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
